@@ -5,6 +5,7 @@ import MyContext from './contextAPI'
 import axios from 'axios'
 import jwt_decode from "jwt-decode";
 import notify from "./notifications";
+import ApiUrl from '../constants';
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
 
@@ -21,7 +22,7 @@ class Login extends React.Component {
         }
 
         axios
-            .post("http://localhost:5000/auth/login/", loginData)
+            .post(ApiUrl + "/auth/login/", loginData)
             .then(res => {
                 const {token} = res.data;
                 localStorage.setItem("jwtToken", token);

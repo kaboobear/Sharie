@@ -5,8 +5,6 @@ import jwt_decode from "jwt-decode";
 import notify from './notifications';
 import ApiUrl from '../constants';
 
-alert(ApiUrl);
-
 const Cont = React.createContext();
 const Provider = Cont.Provider;
 const Consumer = Cont.Consumer;
@@ -132,7 +130,7 @@ class MyProvider extends React.Component {
 
             deletePost: (id) => {
                 notify.notifyThree();
-                axios.delete('http://localhost:5000/posts/' + id);
+                axios.delete(ApiUrl + '/posts/' + id);
 
                 this.setState(currentState => {
                     return {
@@ -151,7 +149,7 @@ class MyProvider extends React.Component {
                 }
 
                 axios
-                    .post('http://localhost:5000/posts/add/', post)
+                    .post(ApiUrl + '/posts/add/', post)
                     .then(res => {
                         this.setState((prevState) => {
                             return {
@@ -173,7 +171,7 @@ class MyProvider extends React.Component {
                     username: this.state.postForm.name
                 }
 
-                axios.post('http://localhost:5000/posts/update/' + id, post);
+                axios.post(ApiUrl + '/posts/update/' + id, post);
 
                 this.setState((prevState) => {
                     return {
@@ -215,7 +213,7 @@ class MyProvider extends React.Component {
         }
 
         axios
-            .get('http://localhost:5000/posts/')
+            .get(ApiUrl + '/posts/')
             .then(posts => {
                 this.setState({posts: posts.data})
             })

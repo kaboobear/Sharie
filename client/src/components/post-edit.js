@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MyContext from './contextAPI'
+import ApiUrl from '../constants';
 
 import axios from 'axios';
 
@@ -51,7 +52,7 @@ class EditPost extends React.Component {
 
 
     componentDidMount(){
-        axios.get('http://localhost:5000/posts/'+this.props.match.params.id).then(res=>{
+        axios.get(ApiUrl + '/posts/'+this.props.match.params.id).then(res=>{
             this.context.state.setPostForm(res.data.username);
         })
     }

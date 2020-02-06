@@ -2,6 +2,7 @@ import React from 'react';
 
 import axios from 'axios'
 import notify from "./notifications";
+import ApiUrl from '../constants';
 
 import MyContext from './contextAPI'
 import {Cont} from './contextAPI'
@@ -24,7 +25,7 @@ class Register extends React.Component {
         console.log(register);
 
         axios
-            .post("http://localhost:5000/auth/register/", register)
+            .post(ApiUrl + "/auth/register/", register)
             .then(res => {
                 this
                     .context
