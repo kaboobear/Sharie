@@ -2,7 +2,10 @@ import React from 'react'
 
 import axios from 'axios'
 import jwt_decode from "jwt-decode";
-import notify from './notifications'
+import notify from './notifications';
+import ApiUrl from '../constants';
+
+alert(ApiUrl);
 
 const Cont = React.createContext();
 const Provider = Cont.Provider;
