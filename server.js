@@ -13,8 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-const uri = 'mongodb+srv://kaboo:123123nko@kaboo-dzvqk.mongodb.net/test?retryWrites=true&w=ma' +
-        'jority'
+const uri = 'mongodb+srv://kaboo:123123nko@kaboo-dzvqk.mongodb.net/test?retryWrites=true&w=majority'
 mongoose.connect(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
