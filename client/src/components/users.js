@@ -4,6 +4,8 @@ import MyContext from './contextAPI'
 
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
+import axios from 'axios'
+import ApiUrl from '../constants';
 import $ from 'jquery'
 
 class Users extends React.Component {
@@ -24,7 +26,138 @@ class Users extends React.Component {
                     .fadeIn(0)
                     .addClass('active');
             });
+    }
 
+    addFriend(user) {
+        this
+            .context
+            .state
+            .setFriends(this.context.state.friends.push(user));
+
+        var currentUser = this.context.state.authInfo.user;
+        currentUser
+            .friendsArray
+            .push(user._id);
+        this
+            .context
+            .state
+            .setUsers(this.context.state.users.map(elem => {
+                if (elem._id === this.context.state.authInfo.user.id) {
+                    elem
+                        .friendsArray
+                        .push(user._id);
+                }
+                return elem
+            }))
+
+        axios
+            .post(ApiUrl + "/auth/update/" + this.context.state.authInfo.user.id, currentUser)
+            .then(res => {
+                var temp = user;
+                temp.followers = temp.followers + 1;
+                this
+                    .context
+                    .state
+                    .setUsers(this.context.state.users.map(elem => {
+                        if (elem._id === user._id) {
+                            elem.followers = temp.followers
+                        }
+                        return elem
+                    }))
+                temp.notAuth = true;
+
+                axios
+                    .post(ApiUrl + "/auth/update/" + user._id, temp)
+                    .then(res => {})
+
+                localStorage.removeItem("jwtToken");
+                this
+                    .context
+                    .state
+                    .setAuthToken(false);
+
+                const {token} = res.data;
+
+                localStorage.setItem("jwtToken", token);
+                this
+                    .context
+                    .state
+                    .setAuthToken(token);
+            })
+    }
+
+    removeFriend(user) {
+        axios
+            .post(ApiUrl + '/auth/friends', this.context.state.authInfo.user.friendsArray)
+            .then(res => {
+                this
+                    .context
+                    .state
+                    .setFriends(res.data);
+            })
+
+        var currentUser = this.context.state.authInfo.user;
+        const index = currentUser
+            .friendsArray
+            .indexOf(user._id);
+        if (index > -1) {
+            currentUser
+                .friendsArray
+                .splice(index, 1);
+        }
+
+        this
+            .context
+            .state
+            .setUsers(this.context.state.users.map(elem => {
+                if (elem._id === this.context.state.authInfo.user.id) {
+                    const index = elem
+                        .friendsArray
+                        .indexOf(user._id);
+                    if (index > -1) {
+                        elem
+                            .friendsArray
+                            .splice(index, 1);
+                    }
+                }
+                return elem
+            }))
+
+        axios
+            .post(ApiUrl + "/auth/update/" + this.context.state.authInfo.user.id, currentUser)
+            .then(res => {
+                var temp = user;
+                temp.followers = temp.followers - 1;
+                this
+                    .context
+                    .state
+                    .setUsers(this.context.state.users.map(elem => {
+                        if (elem._id === user._id) {
+                            elem.followers = temp.followers
+                        }
+                        return elem
+                    }))
+                temp.notAuth = true;
+
+                axios
+                    .post(ApiUrl + "/auth/update/" + user._id, temp)
+                    .then(res => {})
+
+                localStorage.removeItem("jwtToken");
+                this
+                    .context
+                    .state
+                    .setAuthToken(false);
+
+                const {token} = res.data;
+
+                localStorage.setItem("jwtToken", token);
+                this
+                    .context
+                    .state
+                    .setAuthToken(token);
+
+            })
     }
 
     render() {
@@ -41,25 +174,46 @@ class Users extends React.Component {
 
                             <div className="tabs-items">
                                 <div className="tabs-item active">
-                                    <ul className="users-list">
-                                        <li>
-                                            <div className="user-img">
-                                                <img src="img/photo.jpg" alt=""/>
-                                            </div>
+                                    {(context.state.friends.length > 0)
+                                        ? (
+                                            <ul className="users-list">
+                                                {context
+                                                    .state
+                                                    .friends
+                                                    .map(user => (
+                                                        <li key={user._id}>
+                                                            <div className="user-img">
+                                                                <img src="img/photo.jpg" alt=""/>
+                                                            </div>
 
-                                            <div className="user-info">
-                                                <div className="user-nick">
-                                                    Alla
-                                                </div>
-                                                <div className="user-val">
-                                                    0 Posts
-                                                </div>
-                                                <div className="user-val">
-                                                    0 Followers
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                                            <div className="user-info">
+                                                                <div className="user-nick">
+                                                                    {user.login}
+                                                                </div>
+                                                                <div className="user-val">
+                                                                    {user.postsCount} Posts
+                                                                </div>
+                                                                <div className="user-val">
+                                                                    {user.followers} Followers
+                                                                </div>
+                                                            </div>
+
+                                                            <div
+                                                                className="remove-friend-button"
+                                                                onClick={() => {
+                                                                this.removeFriend(user)
+                                                            }}>
+                                                                Unfollow
+                                                            </div>
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        )
+                                        : (
+                                            <div className="empty-title">List is empty</div>
+                                        )
+}
+
                                 </div>
 
                                 <div className="tabs-item">
@@ -84,6 +238,16 @@ class Users extends React.Component {
                                                             {user.followers} Followers
                                                         </div>
                                                     </div>
+
+                                                    {(($.inArray(user._id, context.state.authInfo.user.friendsArray) === -1) && (user._id !== context.state.authInfo.user.id)) && (
+                                                        <div
+                                                            className="add-friend-button"
+                                                            onClick={() => {
+                                                            this.addFriend(user)
+                                                        }}>
+                                                            Follow
+                                                        </div>
+                                                    )}
                                                 </li>
                                             ))}
                                     </ul>

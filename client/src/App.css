@@ -582,6 +582,10 @@ textarea:focus::placeholder {
   transition: .2s;
 }
 
+.nested-btn.hidden{
+  display: none;
+}
+
 .nested-btn img:hover {
   opacity: .6;
 }
@@ -700,6 +704,12 @@ margin-bottom: 10px;
   overflow: hidden;
 }
 
+.empty-title{
+  font-size: 18px;
+  text-align: center;
+  padding: 20px 10px;
+}
+
 .tabs {
   width: 100%;
 }
@@ -743,6 +753,38 @@ margin-bottom: 10px;
   border-top: 1px solid #ccc;
 }
 
+.add-friend-button{
+  margin-left: auto;
+  align-self:center;
+  cursor:pointer;
+  background: #5cdb95;
+  padding: 6px 12px;
+  color:#fff;
+  border-radius: 6px;
+  transition: .2s;
+}
+
+.add-friend-button:hover{
+  background: #55cf8b;
+}
+
+.remove-friend-button{
+  margin-left: auto;
+  align-self:center;
+  cursor:pointer;
+  background: none;
+  padding: 6px 12px;
+  color:#ccc;
+  border-radius: 6px;
+  transition: .2s;
+  border:1px solid #ccc;
+}
+
+.remove-friend-button:hover{
+  border-color:#999;
+  color:#999;
+}
+
 .users-list li {
   padding: 10px;
   display: flex;
@@ -750,7 +792,7 @@ margin-bottom: 10px;
 }
 
 .users-list li:hover {
-  background: #f5f0f0;
+
 }
 
 .user-info {

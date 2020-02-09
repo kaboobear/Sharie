@@ -16,6 +16,7 @@ class MyProvider extends React.Component {
         this.state = {
             posts: [],
             users: [],
+            friends: [],
             postForm: {
                 postText: ''
             },
@@ -38,6 +39,9 @@ class MyProvider extends React.Component {
                 isAuth: false,
                 user: {}
             },
+
+
+
 
             handleChange: (e) => {
                 const {name, value, type, checked} = e.target;
@@ -84,11 +88,11 @@ class MyProvider extends React.Component {
                 })
             },
 
-            setAuthUser: (user) => {
+            setAuthUser: (user) =>{
                 this.setState({
                     authInfo: {
                         ...this.state.authInfo,
-                        user: user
+                        user:user
                     }
                 })
             },
@@ -115,7 +119,7 @@ class MyProvider extends React.Component {
             setPostErrors: (error) => {
                 this.setState({
                     postErrors: {
-                        postText: error
+                        postText:error
                     }
                 })
             },
@@ -142,14 +146,21 @@ class MyProvider extends React.Component {
             setUsers: (usersArr) => {
                 this.setState({
                     ...this.state,
-                    users: usersArr
+                    users:usersArr
+                })
+            },
+
+            setFriends: (friends) => {
+                this.setState({
+                    ...this.state,
+                    friends:friends
                 })
             },
 
             setPosts: (posts) => {
                 this.setState({
                     ...this.state,
-                    posts: posts
+                    posts:posts
                 })
             },
 
@@ -168,61 +179,53 @@ class MyProvider extends React.Component {
 
             deletePost: (id) => {
                 notify.notifyThree();
-                axios
-                    .delete(ApiUrl + '/posts/' + id)
-                    .then(res => {
-                        var authInfo = {
-                            id: this.state.authInfo.user.id,
-                            login: this.state.authInfo.user.login,
-                            mail: this.state.authInfo.user.mail,
-                            pass: this.state.authInfo.user.pass,
-                            followers: this.state.authInfo.user.followers,
-                            postsCount: this.state.authInfo.user.postsCount - 1
+                axios.delete(ApiUrl + '/posts/' + id).then(res => {
+
+                    this.setState(currentState => {
+                        return {
+                            posts: currentState
+                                .posts
+                                .filter((post) => (post._id !== id))
                         }
-
-                        axios
-                            .post(ApiUrl + '/auth/update/' + this.state.authInfo.user.id, authInfo)
-                            .then(res => {
-                                var temp = this.state.authInfo.user;
-                                temp.postsCount = temp.postsCount - 1;
-                                this
-                                    .state
-                                    .setAuthUser(temp);
-
-                                localStorage.removeItem("jwtToken");
-                                this
-                                    .state
-                                    .setAuthToken(false);
-
-                                const {token} = res.data;
-
-                                localStorage.setItem("jwtToken", token);
-                                this
-                                    .state
-                                    .setAuthToken(token);
-
-                                this
-                                    .state
-                                    .setUsers(this.state.users.map(elem => {
-                                        if (elem._id === this.state.authInfo.user.id) {
-                                            elem.postsCount = elem.postsCount - 1;
-                                        }
-                                        return elem;
-                                    }))
-
-                                this.setState(currentState => {
-                                    return {
-                                        posts: currentState
-                                            .posts
-                                            .filter((post) => (post._id !== id))
-                                    }
-                                })
-
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
                     })
+
+
+
+                    var authInfo = {
+                        id:this.state.authInfo.user.id,
+                        login:this.state.authInfo.user.login,
+                        mail:this.state.authInfo.user.mail,
+                        pass:this.state.authInfo.user.pass,
+                        followers:this.state.authInfo.user.followers,
+                        postsCount:this.state.authInfo.user.postsCount - 1,
+                        friendsArray:this.state.authInfo.user.friendsArray,
+                    }
+
+                    axios.post(ApiUrl + '/auth/update/'+this.state.authInfo.user.id, authInfo).then(res =>{
+                        var temp = this.state.authInfo.user;
+                        temp.postsCount = temp.postsCount-1;
+                        this.state.setAuthUser(temp);
+
+                        localStorage.removeItem("jwtToken");
+                        this.state.setAuthToken(false);
+
+                        const {token} = res.data;
+                        
+                        localStorage.setItem("jwtToken", token);
+                        this.state.setAuthToken(token);
+
+
+                        this.state.setUsers(this.state.users.map(elem => {
+                            if(elem._id === this.state.authInfo.user.id){
+                                elem.postsCount = elem.postsCount - 1;
+                            }
+                            return elem;
+                        }))
+
+                    }).catch(err => {console.log(err)})
+                })
+
+  
             },
 
             addPost: () => {
@@ -240,62 +243,46 @@ class MyProvider extends React.Component {
                     .post(ApiUrl + '/posts/add/', post)
                     .then(res => {
                         axios
-                            .get(ApiUrl + '/posts/')
-                            .then(posts => {
-                                this.setState({posts: posts.data})
+                        .get(ApiUrl + '/posts/')
+                        .then(posts => {
+                            this.setState({posts: posts.data})
 
-                                var authInfo = {
-                                    id: this.state.authInfo.user.id,
-                                    login: this.state.authInfo.user.login,
-                                    mail: this.state.authInfo.user.mail,
-                                    pass: this.state.authInfo.user.pass,
-                                    followers: this.state.authInfo.user.followers,
-                                    postsCount: this.state.authInfo.user.postsCount + 1
-                                }
+                            var authInfo = {
+                                id:this.state.authInfo.user.id,
+                                login:this.state.authInfo.user.login,
+                                mail:this.state.authInfo.user.mail,
+                                pass:this.state.authInfo.user.pass,
+                                followers:this.state.authInfo.user.followers,
+                                postsCount:this.state.authInfo.user.postsCount + 1,
+                                friendsArray:this.state.authInfo.user.friendsArray,
+                            }
 
-                                axios
-                                    .post(ApiUrl + '/auth/update/' + this.state.authInfo.user.id, authInfo)
-                                    .then(res => {
-                                        var temp = this.state.authInfo.user;
-                                        temp.postsCount = temp.postsCount + 1;
-                                        this
-                                            .state
-                                            .setAuthUser(temp);
+                            axios.post(ApiUrl + '/auth/update/'+this.state.authInfo.user.id, authInfo).then(res =>{
+                                var temp = this.state.authInfo.user;
+                                temp.postsCount = temp.postsCount+1;
+                                this.state.setAuthUser(temp);
 
-                                        localStorage.removeItem("jwtToken");
-                                        this
-                                            .state
-                                            .setAuthToken(false);
+                                localStorage.removeItem("jwtToken");
+                                this.state.setAuthToken(false);
 
-                                        const {token} = res.data;
+                                const {token} = res.data;
+                                
+                                localStorage.setItem("jwtToken", token);
+                                this.state.setAuthToken(token);
 
-                                        localStorage.setItem("jwtToken", token);
-                                        this
-                                            .state
-                                            .setAuthToken(token);
 
-                                        this
-                                            .state
-                                            .setUsers(this.state.users.map(elem => {
-                                                if (elem._id === this.state.authInfo.user.id) {
-                                                    elem.postsCount = elem.postsCount + 1;
-                                                }
-                                                return elem;
-                                            }))
+                                this.state.setUsers(this.state.users.map(elem => {
+                                    if(elem._id === this.state.authInfo.user.id){
+                                        elem.postsCount = elem.postsCount + 1;
+                                    }
+                                    return elem;
+                                }))
 
-                                    })
-                                    .catch(err => {
-                                        console.log(err)
-                                    })
+                            }).catch(err => {console.log(err)})
 
-                            })
+                        })
                     });
             },
-
-            editPost: (id) => {
-                notify.notifyTwo();
-
-            }
         }
     }
 
@@ -309,6 +296,7 @@ class MyProvider extends React.Component {
             this
                 .state
                 .setAuth(true, decoded);
+                
 
             const currentTime = Date.now() / 1000;
             if (decoded.exp < currentTime) {
@@ -322,14 +310,16 @@ class MyProvider extends React.Component {
             .get(ApiUrl + '/posts/')
             .then(posts => {
                 this.setState({posts: posts.data})
-            })
 
-        axios
-            .get(ApiUrl + '/auth/')
-            .then(users => {
-                this
-                    .state
-                    .setUsers(users.data);
+                axios
+                .get(ApiUrl + '/auth/')
+                .then(users => {
+                    this.state.setUsers(users.data);
+
+                    axios.post(ApiUrl+'/auth/friends',this.state.authInfo.user.friendsArray).then(res => {
+                        this.state.setFriends(res.data);
+                    })
+                })
             })
     }
 

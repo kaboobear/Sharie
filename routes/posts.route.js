@@ -4,6 +4,7 @@ let Post = require('../models/post.model');
 router
     .route('/')
     .get((req, res) => {
+
         Post
             .find()
             .populate('author')

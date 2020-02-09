@@ -26,6 +26,17 @@ router
     })
 
 router
+    .route('/friends')
+    .post((req, res) => {
+        Auth
+            .find({'_id':{$in:req.body}},function(err,docs){
+                console.log(docs);
+                res.json(docs)
+            })
+
+    })
+
+router
     .route('/update/:id')
     .post((req, res) => {
 
@@ -38,28 +49,32 @@ router
                 auth.pass = req.body.pass;
                 auth.followers = req.body.followers;
                 auth.postsCount = req.body.postsCount;
+                auth.friendsArray = req.body.friendsArray;
+
+                if (!req.body.notAuth) {
+                    const payload = {
+                        id: req.body.id,
+                        login: req.body.login,
+                        mail: req.body.mail,
+                        pass: req.body.pass,
+                        followers: req.body.followers,
+                        postsCount: req.body.postsCount,
+                        friendsArray: req.body.friendsArray
+                    };
+
+                    jwt.sign(payload, '123123nko', {
+                        expiresIn: 31556926
+                    }, (err, token) => {
+                        res.json({
+                            success: true,
+                            token: "Bearer " + token
+                        });
+                    });
+                }
 
                 auth
                     .save()
-                    .then(() => {
-                        const payload = {
-                            id: req.body.id,
-                            login: req.body.login,
-                            mail: req.body.mail,
-                            pass:req.body.pass,
-                            followers: req.body.followers,
-                            postsCount: req.body.postsCount
-                        };
-        
-                        jwt.sign(payload, '123123nko', {
-                            expiresIn: 31556926
-                        }, (err, token) => {
-                            res.json({
-                                success: true,
-                                token: "Bearer " + token
-                            });
-                        });
-                    })
+                    .then(() => {})
                     .catch(err => res.status(400).json('Error: ' + err))
             })
             .catch(err => res.status(400).json('Error: ' + err))
@@ -127,9 +142,10 @@ router.post("/login", (req, res) => {
                             id: auth.id,
                             login: auth.login,
                             mail: auth.mail,
-                            pass:auth.pass,
+                            pass: auth.pass,
                             followers: auth.followers,
-                            postsCount: auth.postsCount
+                            postsCount: auth.postsCount,
+                            friendsArray: auth.friendsArray
                         };
 
                         jwt.sign(payload, '123123nko', {

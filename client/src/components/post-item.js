@@ -77,9 +77,6 @@ class PostItem extends React.Component {
                         }
                         return elem
                     }))
-
-
-                    console.log(this.context.state.users);
             })
     }
 
@@ -92,9 +89,8 @@ class PostItem extends React.Component {
                     <div key={post._id} className="post-item">
                         <div className="flex-wrap">
 
-                            {(post.authorId === context.state.authInfo.user.id) && (
                                 <div className="nested">
-                                    <div className="nested-btn"><img src="img/dots-ico.png" alt=""/></div>
+                                    <div className={(post.authorId === context.state.authInfo.user.id) ? "nested-btn" : "nested-btn hidden"}><img src="img/dots-ico.png" alt=""/></div>
                                     <div
                                         onClick={() => {
                                         context
@@ -105,7 +101,6 @@ class PostItem extends React.Component {
                                         delete
                                     </div>
                                 </div>
-                            )}
 
                             <div className="post-item-img">
                                 <img src="img/photo.jpg" alt=""/>
@@ -131,7 +126,9 @@ class PostItem extends React.Component {
                                     ? "post-item-btns current"
                                     : "post-item-btns"}>
                                     <div
-                                        className={($.inArray(context.state.authInfo.user.id, post.likesArray) === -1) ? "post-item-btn like" : "post-item-btn like liked" }
+                                        className={($.inArray(context.state.authInfo.user.id, post.likesArray) === -1)
+                                        ? "post-item-btn like"
+                                        : "post-item-btn like liked"}
                                         onClick={() => {
                                         this.likePost(post)
                                     }}>

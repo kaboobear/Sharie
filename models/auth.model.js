@@ -23,6 +23,9 @@ const authSchema = new Schema({
         type: Number,
         default: 0
     },
+    friendsArray: {
+        type: [String],
+    },
     postsCount: {
         type: Number,
         default: 0
