@@ -8,8 +8,6 @@ import MyContext from './contextAPI'
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
 
-
-
 class Register extends React.Component {
 
     register(e) {
@@ -22,11 +20,11 @@ class Register extends React.Component {
             pass2: this.context.state.authInput.pass2
         }
 
-        console.log(register);
-
         axios
             .post(ApiUrl + "/auth/register/", register)
             .then(res => {
+                notify.notifySix();
+
                 this
                     .context
                     .state
@@ -37,92 +35,109 @@ class Register extends React.Component {
                     .state
                     .setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
 
-                notify.notifySix();
+                axios
+                    .get(ApiUrl + '/auth/')
+                    .then(users => {
+                        this
+                            .context
+                            .state
+                            .setUsers(users.data);
+                    })
 
                 this
                     .props
                     .history
-                    .push('/login');
+                    .push('/');
             })
             .catch(err => {
                 this
                     .context
                     .state
                     .setAuthErrors(err.response.data);
-
             });
+    }
+
+    componentWillUnmount() {
+        this
+            .context
+            .state
+            .setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
     }
 
     render() {
         return (
             <MyContext>
                 {(context) => (
-                        <div className="container">
-                            <div className="page-title">Register</div>
+                    <div className="register-section">
+                        {/* <div className="page-title">Register</div> */}
 
-                            <div className="flex-wrap center">
-                                <form
-                                    onSubmit={(e) => {
-                                    this.register(e)
-                                }}
-                                    className="add-form"
-                                    autoComplete="off">
-                                    <div className="simple-input">
-                                        <input
-                                            type="text"
-                                            name="login"
-                                            placeholder="Login"
-                                            value={context.state.authInput.login}
-                                            onChange={context.state.handleChange2}/>{this.context.state.authErrors.login && (
-                                            <span className="error-message">
-                                                {this.context.state.authErrors.login}
-                                            </span>
-                                        )}
-                                    </div>
+                        <div className="flex-wrap center">
+                            <form
+                                onSubmit={(e) => {
+                                this.register(e)
+                            }}
+                                className="add-form"
+                                autoComplete="off">
+                                <div className="simple-input">
+                                    <input
+                                        type="text"
+                                        name="login"
+                                        placeholder="Login"
+                                        value={context.state.authInput.login}
+                                        onChange={context.state.handleChange2}
+                                        className={this.context.state.authErrors.login && "error"}/> {this.context.state.authErrors.login && (
+                                        <div className="exclam">
+                                            <img src="img/exclam-ico.png" alt=""/>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <div className="simple-input">
-                                        <input
-                                            type="text"
-                                            name="mail"
-                                            placeholder="E-mail"
-                                            value={context.state.authInput.mail}
-                                            onChange={context.state.handleChange2}/>{this.context.state.authErrors.mail && (
-                                            <span className="error-message">
-                                                {this.context.state.authErrors.mail}
-                                            </span>
-                                        )}
-                                    </div>
+                                <div className="simple-input">
+                                    <input
+                                        type="text"
+                                        name="mail"
+                                        placeholder="E-mail"
+                                        value={context.state.authInput.mail}
+                                        onChange={context.state.handleChange2}
+                                        className={this.context.state.authErrors.mail && "error"}/> {this.context.state.authErrors.mail && (
+                                        <div className="exclam">
+                                            <img src="img/exclam-ico.png" alt=""/>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <div className="simple-input">
-                                        <input
-                                            type="password"
-                                            name="pass"
-                                            placeholder="Password"
-                                            value={context.state.authInput.pass}
-                                            onChange={context.state.handleChange2}/>{this.context.state.authErrors.pass && (
-                                            <span className="error-message">
-                                                {this.context.state.authErrors.pass}
-                                            </span>
-                                        )}
-                                    </div>
+                                <div className="simple-input">
+                                    <input
+                                        type="password"
+                                        name="pass"
+                                        placeholder="Password"
+                                        value={context.state.authInput.pass}
+                                        onChange={context.state.handleChange2}
+                                        className={this.context.state.authErrors.pass && "error"}/> {this.context.state.authErrors.pass && (
+                                        <div className="exclam">
+                                            <img src="img/exclam-ico.png" alt=""/>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <div className="simple-input">
-                                        <input
-                                            type="password"
-                                            name="pass2"
-                                            placeholder="Password Again"
-                                            value={context.state.authInput.pass2}
-                                            onChange={context.state.handleChange2}/>{this.context.state.authErrors.pass2 && (
-                                            <span className="error-message">
-                                                {this.context.state.authErrors.pass2}
-                                            </span>
-                                        )}
-                                    </div>
+                                <div className="simple-input">
+                                    <input
+                                        type="password"
+                                        name="pass2"
+                                        placeholder="Password Again"
+                                        value={context.state.authInput.pass2}
+                                        onChange={context.state.handleChange2}
+                                        className={this.context.state.authErrors.pass2 && "error"}/> {this.context.state.authErrors.pass2 && (
+                                        <div className="exclam">
+                                            <img src="img/exclam-ico.png" alt=""/>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <button type="submit" className="btn">Sign Up</button>
-                                </form>
-                            </div>
+                                <button type="submit" className="btn">Sign Up</button>
+                            </form>
                         </div>
+                    </div>
                 )}
             </MyContext>
         );

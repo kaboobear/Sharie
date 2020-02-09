@@ -4,50 +4,76 @@ import MyContext from './contextAPI'
 
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
-
-
-
+import CurrentUser from './current-user'
 
 class AddPost extends React.Component {
 
-    addPost(e){
+    addPost(e) {
         e.preventDefault();
 
-        this.context.state.addPost();
-        this.context.state.setPostForm('');
-        this.props.history.push('/');
+        if (this.context.state.postForm.postText.length === 0) {
+            this
+                .context
+                .state
+                .setPostErrors("Field can't be empty");
+        } else {
+            this
+                .context
+                .state
+                .addPost();
+            this
+                .context
+                .state
+                .setPostErrors("");
+            this
+                .context
+                .state
+                .setPostForm('');
+        }
     }
-
 
     render() {
         return (
             <MyContext>
                 {(context) => (
-                        <div className="container">
-                            <div className="page-title">Add Post</div>
+                    <div className="add-post-section">
+                        <form
+                            onSubmit={(e) => {
+                            this.addPost(e)
+                        }}
+                            className="add-form">
+                            <div className="simple-input">
 
-                            <div className="flex-wrap center">
-                                <form onSubmit={(e)=>{this.addPost(e)}} className="add-form">
-                                    <div className="simple-input">
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            placeholder="Name"
-                                            value={context.state.postForm.name}
-                                            onChange={context.state.handleChange}/>
+                            <CurrentUser/>
+                                
+                                <textarea
+                                    type="text"
+                                    name="postText"
+                                    placeholder="Type here..."
+                                    value={context.state.postForm.postText}
+                                    onChange={context.state.handleChange}></textarea>
+
+                                <button type="submit" className="btn add-btn">Add</button>
+
+                                {(context.state.postErrors.postText !== '') && (
+                                    <div className="post-error">
+                                        {context.state.postErrors.postText}
                                     </div>
-
-                                    <button type="submit" className="btn">Add</button>
-                                </form>
+                                )}
                             </div>
+                        </form>
+
                     </div>
                 )}
             </MyContext>
         );
     }
 
-    componentWillUnmount(){
-            this.context.state.setPostForm('');
+    componentWillUnmount() {
+        this
+            .context
+            .state
+            .setPostForm('');
     }
 
 }

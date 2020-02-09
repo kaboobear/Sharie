@@ -3,7 +3,7 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 const mongoose = require("mongoose");
 
 
-const Login = mongoose.model("Login");
+const Login = mongoose.model("Auth");
 
 
 const opts = {};

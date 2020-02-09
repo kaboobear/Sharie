@@ -9,9 +9,6 @@ import ApiUrl from '../constants';
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
 
-
-
-
 class Login extends React.Component {
     login(e) {
         e.preventDefault();
@@ -24,6 +21,8 @@ class Login extends React.Component {
         axios
             .post(ApiUrl + "/auth/login/", loginData)
             .then(res => {
+                notify.notifyFour();
+
                 const {token} = res.data;
                 localStorage.setItem("jwtToken", token);
 
@@ -33,12 +32,12 @@ class Login extends React.Component {
                     .setAuthToken(token);
 
                 const decoded = jwt_decode(token);
+
+
                 this
                     .context
                     .state
                     .setAuth(true, decoded);
-
-                notify.notifyFour();
 
                 this
                     .context
@@ -62,8 +61,17 @@ class Login extends React.Component {
                     .state
                     .setAuthErrors(err.response.data);
             });
-
     }
+
+
+
+
+    componentWillUnmount(){
+        this.context.state.setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
+    }
+    
+
+
 
 
 
@@ -71,48 +79,55 @@ class Login extends React.Component {
         return (
             <MyContext>
                 {(context) => (
-                        <div className="container">
-                            <div className="page-title">Login</div>
+                    <div className="login-section">
+                        {/* <div className="page-title">Login</div> */}
 
-                            <div className="flex-wrap center">
-                                <form
-                                    onSubmit={(e) => {
-                                    this.login(e)
-                                }}
-                                    className="add-form"
-                                    autoComplete="off">
-                                    <div className="simple-input">
-                                        <input
-                                            type="text"
-                                            name="mail"
-                                            placeholder="Mail"
-                                            value={context.state.authInput.mail}
-                                            onChange={context.state.handleChange2}/> {this.context.state.authErrors.mail && (
-                                            <span className="error-message">
-                                                {this.context.state.authErrors.mail}
-                                            </span>
-                                        )}
-                                    </div>
+                        <div className="flex-wrap center">
+                            <form
+                                onSubmit={(e) => {
+                                this.login(e)
+                            }}
+                                className="add-form"
+                                autoComplete="off">
+                                <div className="simple-input">
+                                    <input
+                                        type="text"
+                                        name="mail"
+                                        placeholder="Mail"
+                                        value={context.state.authInput.mail}
+                                        onChange={context.state.handleChange2}
+                                        className={this.context.state.authErrors.mail && "error"}/> {this.context.state.authErrors.mail && (
+                                        <div className="exclam">
+                                            <img src="img/exclam-ico.png" alt=""/>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <div className="simple-input">
-                                        <input
-                                            type="password"
-                                            name="pass"
-                                            placeholder="Password"
-                                            value={context.state.authInput.pass}
-                                            onChange={context.state.handleChange2}/> {this.context.state.authErrors.pass && (
-                                            <span className="error-message">
-                                                {this.context.state.authErrors.pass}
-                                            </span>
-                                        )}
-                                    </div>
+                                <div className="simple-input">
+                                    <input
+                                        type="password"
+                                        name="pass"
+                                        placeholder="Password"
+                                        className={this.context.state.authErrors.pass && "error"}
+                                        value={context.state.authInput.pass}
+                                        onChange={context.state.handleChange2}/> {this.context.state.authErrors.pass && (
+                                            <div className="exclam">
+                                                <img src="img/exclam-ico.png" alt=""/>
+                                            </div>
+                                    )}
 
-                                    <button type="submit" className="btn">Sign In</button>
+                                    {/* {this.context.state.authErrors.pass && (
+                                        <span className="error-message">
+                                            {this.context.state.authErrors.pass}
+                                        </span>
+                                        )} */}
+                                </div>
 
+                                <button type="submit" className="btn">Sign In</button>
 
-                                </form>
-                            </div>
+                            </form>
                         </div>
+                    </div>
                 )}
             </MyContext>
         );

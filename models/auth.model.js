@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const loginSchema = new Schema({
+const authSchema = new Schema({
     login: {
         type: String,
         required: true
@@ -18,9 +18,17 @@ const loginSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    followers: {
+        type: Number,
+        default: 0
+    },
+    postsCount: {
+        type: Number,
+        default: 0
     }
 }, {timestamps: true});
 
-const Login = mongoose.model('Login', loginSchema);
+const Auth = mongoose.model('Auth', authSchema);
 
-module.exports = Login;
+module.exports = Auth;

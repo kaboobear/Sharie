@@ -6,18 +6,32 @@ router
     .get((req, res) => {
         Post
             .find()
+            .populate('author')
             .then(posts => res.json(posts))
     })
 
 router
     .route('/add')
     .post((req, res) => {
-        const username = req.body.username;
-        const newPost = new Post({username});
+        const authorId = req.body.authorId;
+        const postText = req.body.postText;
+        const postShared = req.body.postShared;
+        const postLikes = req.body.postLikes;
+        const postShares = req.body.postShares;
+        const author = req.body.authorId;
+
+        const newPost = new Post({
+            authorId,
+            author,
+            postText,
+            postShared,
+            postLikes,
+            postShares
+        });
 
         newPost
             .save()
-            .then(posts => res.json(newPost))
+            .then(posts => res.json(posts))
             .catch(err => res.status(400).json('Error: ' + err))
     })
 
@@ -36,7 +50,7 @@ router
         Post
             .findByIdAndDelete(req.params.id)
             .then(posts => res.json('Post deleted'))
-            .catch(err => res.status(400).json('Error: ' + err))
+            .catch(err => res.status(400).json(' Error : ' + err))
     })
 
 router
@@ -45,7 +59,13 @@ router
         Post
             .findById(req.params.id)
             .then(post => {
-                post.username = req.body.username;
+                post.authorId = req.body.authorId;
+                post.postText = req.body.postText;
+                post.postShared = req.body.postShared;
+                post.postLikes = req.body.postLikes;
+                post.postShares = req.body.postShares;
+                post.author = req.body.authorId;
+                post.likesArray = req.body.likesArray;
 
                 post
                     .save()
@@ -54,5 +74,6 @@ router
             })
             .catch(err => res.status(400).json('Error: ' + err))
     })
+
 
 module.exports = router;

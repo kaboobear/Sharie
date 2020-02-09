@@ -2,21 +2,40 @@ import React from 'react';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-import Header from './components/header';
 import Login from './components/login';
 import Register from './components/register';
 import Posts from './components/posts';
-import PostAdd from './components/post-add';
-import PostEdit from './components/post-edit';
+import Navbar from './components/navbar';
+import Users from './components/users';
 
-import {MyProvider} from './components/contextAPI'
-import {Cont} from './components/contextAPI'
-import MyContext from './components/contextAPI'
+import {MyProvider} from './components/contextAPI';
+import {Cont} from './components/contextAPI';
+import MyContext from './components/contextAPI';
+import $ from 'jquery';
 
-import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom'
+import {BrowserRouter as Router, NavLink, Route, Redirect} from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 
 class App extends React.Component {
+
+    componentDidMount() {
+        $('.tabs-buttons')
+            .on('click', 'li:not(.active)', function () {
+                $(this)
+                    .addClass('active')
+                    .siblings()
+                    .removeClass('active')
+                    .parent()
+                    .next('.tabs-items')
+                    .find('.tabs-item')
+                    .fadeOut(0)
+                    .removeClass('active')
+                    .eq($(this).index())
+                    .fadeIn(0)
+                    .addClass('active');
+            });
+    }
+
     render() {
         return (
             <Router>
@@ -24,41 +43,45 @@ class App extends React.Component {
                     <MyContext>
                         {(context) => (
                             <div className="wrapper">
-                                <Header/>
-
-
-
                                 <div className="content-section">
-                                    <Route path="/" exact component={Posts}/>
+                                    <div className="container">
+                                        {(context.state.authInfo.isAuth)
+                                            ? (
+                                                <div className="flex-wrap">
+                                                    <Navbar/>
 
-                                    <Route path="/posts/add" exact component={PostAdd}/>
+                                                    <div className="main-section">
+                                                        <Route path="/" exact component={Posts}/>
+                                                    </div>
 
-                                    <Route path="/posts/edit/:id" exact component={PostEdit}/>
+                                                    <Users/>
+                                                </div>
+                                            )
+                                            : (
+                                                <div className="auth-section">
+                                                    <div className="tabs">
+                                                        <NavLink className="auth-logo" to="/">
+                                                            Sharie
+                                                        </NavLink>
 
-                                    <Route
-                                        path="/login"
-                                        exact
-                                        render={props => {
-                                        return (context.state.authInfo.isAuth !== true)
-                                            ? <Login/>
-                                            : <Redirect to="/"/>
-                                    }}/>
+                                                        <ul className="tabs-buttons">
+                                                            <NavLink exact to="/">Login</NavLink>
+                                                            <NavLink exact to="/register">Registration</NavLink>
+                                                        </ul>
 
-                                    <Route
-                                        path="/register"
-                                        exact
-                                        render={props => {
-                                        return (context.state.authInfo.isAuth !== true)
-                                            ? <Register/>
-                                            : <Redirect to="/"/>
-                                    }}/>
+                                                        <div className="tabs-items">
+                                                            <Route path="/" exact component={Login}/>
+                                                            <Route path="/register" exact component={Register}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            )
+}
+                                    </div>
                                 </div>
 
-
-
-                                <ToastContainer enableMultiContainer containerId={'one'}/>
-                                <ToastContainer enableMultiContainer containerId={'one'}/>
-                                <ToastContainer enableMultiContainer containerId={'one'}/>
+                                <ToastContainer containerId={'one'}/>
                             </div>
                         )}
                     </MyContext>
@@ -66,7 +89,6 @@ class App extends React.Component {
             </Router>
         );
     }
-
 }
 
 App.contextType = Cont

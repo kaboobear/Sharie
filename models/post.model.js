@@ -3,12 +3,37 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-    username: {
+    authorId: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
-        minlength: 3
+    },
+    author:{ 
+        type: Schema.Types.ObjectId,
+        ref: 'Auth' 
+    },
+    likesArray:{ 
+        type: [String],
+    },
+    postText: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    postShared: {
+        type: Number,
+        required: true,
+        trim: true, 
+    },
+    postLikes: {
+        type: Number,
+        required: true,
+        trim: true,
+    },
+    postShares: {
+        type: Number,
+        required: true,
+        trim: true,
     }
 }, {timestamps: true});
 

@@ -7,6 +7,64 @@ const validateLogin = require("../validation/login");
 
 let Auth = require('../models/auth.model');
 
+router
+    .route('/')
+    .get((req, res) => {
+        Auth
+            .find()
+            .limit(50)
+            .then(auth => res.json(auth))
+    })
+
+router
+    .route('/:id')
+    .get((req, res) => {
+        Auth
+            .findById(req.params.id)
+            .then(user => res.json(user))
+            .catch(err => res.status(400).json('Error: ' + err))
+    })
+
+router
+    .route('/update/:id')
+    .post((req, res) => {
+
+        Auth
+            .findById(req.params.id)
+            .then(auth => {
+
+                auth.login = req.body.login;
+                auth.mail = req.body.mail;
+                auth.pass = req.body.pass;
+                auth.followers = req.body.followers;
+                auth.postsCount = req.body.postsCount;
+
+                auth
+                    .save()
+                    .then(() => {
+                        const payload = {
+                            id: req.body.id,
+                            login: req.body.login,
+                            mail: req.body.mail,
+                            pass:req.body.pass,
+                            followers: req.body.followers,
+                            postsCount: req.body.postsCount
+                        };
+        
+                        jwt.sign(payload, '123123nko', {
+                            expiresIn: 31556926
+                        }, (err, token) => {
+                            res.json({
+                                success: true,
+                                token: "Bearer " + token
+                            });
+                        });
+                    })
+                    .catch(err => res.status(400).json('Error: ' + err))
+            })
+            .catch(err => res.status(400).json('Error: ' + err))
+    })
+
 router.post("/register", (req, res) => {
     const {errors, isValid} = validateRegister(req.body);
 
@@ -40,21 +98,17 @@ router.post("/register", (req, res) => {
         });
 });
 
-
-
-
 router.post("/login", (req, res) => {
     const {errors, isValid} = validateLogin(req.body);
-
 
     if (!isValid) {
         return res
             .status(400)
             .json(errors);
     }
+
     const mail = req.body.mail;
     const pass = req.body.pass;
-
 
     Auth
         .findOne({mail})
@@ -69,10 +123,13 @@ router.post("/login", (req, res) => {
                 .compare(pass, auth.pass)
                 .then(isMatch => {
                     if (isMatch) {
-
                         const payload = {
                             id: auth.id,
-                            login: auth.login
+                            login: auth.login,
+                            mail: auth.mail,
+                            pass:auth.pass,
+                            followers: auth.followers,
+                            postsCount: auth.postsCount
                         };
 
                         jwt.sign(payload, '123123nko', {
