@@ -22,16 +22,16 @@ class Navbar extends React.Component {
 
                         <ul className="navbar-list">
                             <li>
-                                <NavLink exact to ='/'> <div className="navbar-list-img"><img src="img/home-ico.png" alt=""/></div> Home</NavLink>
+                                <NavLink exact to ='/'> <div className="navbar-list-img"><img src="/img/home-ico.png" alt=""/></div> Home</NavLink>
                             </li>
                             <li>
-                                <NavLink exact to ='/profile'><div className="navbar-list-img"><img src="img/user-ico.png" alt=""/></div>Profile</NavLink>
+                                <NavLink exact to ='/profile'><div className="navbar-list-img"><img src="/img/user-ico.png" alt=""/></div>Profile</NavLink>
                             </li>
                             <li>
-                                <NavLink exact to ='/settings'><div className="navbar-list-img"><img src="img/settings-ico.png" alt=""/></div>Settings</NavLink>
+                                <NavLink exact to ='/settings'><div className="navbar-list-img"><img src="/img/settings-ico.png" alt=""/></div>Settings</NavLink>
                             </li>
                             <li>
-                                <NavLink exact to ='/about'><div className="navbar-list-img"><img src="img/book-ico.png" alt=""/></div>About</NavLink>
+                                <NavLink exact to ='/about'><div className="navbar-list-img"><img src="/img/book-ico.png" alt=""/></div>About</NavLink>
                             </li>
                         </ul>
                     </div>

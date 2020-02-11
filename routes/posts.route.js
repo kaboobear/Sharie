@@ -7,6 +7,7 @@ router
 
         Post
             .find()
+            .sort('-createdAt')
             .populate('author')
             .then(posts => res.json(posts))
     })

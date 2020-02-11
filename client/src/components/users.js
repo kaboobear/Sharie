@@ -6,6 +6,7 @@ import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import ApiUrl from '../constants';
+import {Link} from 'react-router-dom'
 import $ from 'jquery'
 
 class Users extends React.Component {
@@ -29,6 +30,7 @@ class Users extends React.Component {
     }
 
     addFriend(user) {
+
         this
             .context
             .state
@@ -68,7 +70,9 @@ class Users extends React.Component {
 
                 axios
                     .post(ApiUrl + "/auth/update/" + user._id, temp)
-                    .then(res => {})
+                    .then(res => {
+
+                    })
 
                 localStorage.removeItem("jwtToken");
                 this
@@ -182,8 +186,10 @@ class Users extends React.Component {
                                                     .friends
                                                     .map(user => (
                                                         <li key={user._id}>
+                                                            <Link className="link" to={"/user/" + user._id}></Link>
+
                                                             <div className="user-img">
-                                                                <img src="img/photo.jpg" alt=""/>
+                                                                <img src="/img/photo.jpg" alt=""/>
                                                             </div>
 
                                                             <div className="user-info">
@@ -217,40 +223,47 @@ class Users extends React.Component {
                                 </div>
 
                                 <div className="tabs-item">
-                                    <ul className="users-list">
-                                        {context
-                                            .state
-                                            .users
-                                            .map(user => (
-                                                <li key={user._id}>
-                                                    <div className="user-img">
-                                                        <img src="img/photo.jpg" alt=""/>
-                                                    </div>
+                                    {(context.state.friends.length + 1 !== context.state.users.length)
+                                        ? (
+                                            <ul className="users-list">
+                                                {context
+                                                    .state
+                                                    .users
+                                                    .map(user => ((user._id !== context.state.authInfo.user.id && $.inArray(user._id, context.state.authInfo.user.friendsArray) === -1) && (
+                                                        <li key={user._id}>
+                                                            <Link className="link" to={"/user/" + user._id}></Link>
 
-                                                    <div className="user-info">
-                                                        <div className="user-nick">
-                                                            {user.login}
-                                                        </div>
-                                                        <div className="user-val">
-                                                            {user.postsCount} Posts
-                                                        </div>
-                                                        <div className="user-val">
-                                                            {user.followers} Followers
-                                                        </div>
-                                                    </div>
+                                                            <div className="user-img">
+                                                                <img src="/img/photo.jpg" alt=""/>
+                                                            </div>
 
-                                                    {(($.inArray(user._id, context.state.authInfo.user.friendsArray) === -1) && (user._id !== context.state.authInfo.user.id)) && (
-                                                        <div
-                                                            className="add-friend-button"
-                                                            onClick={() => {
-                                                            this.addFriend(user)
-                                                        }}>
-                                                            Follow
-                                                        </div>
-                                                    )}
-                                                </li>
-                                            ))}
-                                    </ul>
+                                                            <div className="user-info">
+                                                                <div className="user-nick">
+                                                                    {user.login}
+                                                                </div>
+                                                                <div className="user-val">
+                                                                    {user.postsCount} Posts
+                                                                </div>
+                                                                <div className="user-val">
+                                                                    {user.followers} Followers
+                                                                </div>
+                                                            </div>
+
+                                                            <div
+                                                                className="add-friend-button"
+                                                                onClick={() => {
+                                                                this.addFriend(user)
+                                                            }}>
+                                                                Follow
+                                                            </div>
+                                                        </li>
+                                                    )))}
+                                            </ul>
+                                        )
+                                        : (
+                                            <div className="empty-title">List is empty</div>
+                                        )
+}
                                 </div>
                             </div>
                         </div>

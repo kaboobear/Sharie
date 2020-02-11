@@ -23,9 +23,15 @@ class Login extends React.Component {
             .then(res => {
                 notify.notifyFour();
 
-                const {token} = res.data;
-                localStorage.setItem("jwtToken", token);
+                localStorage.removeItem("jwtToken");
+                this
+                    .context
+                    .state
+                    .setAuthToken(false);
 
+                const {token} = res.data;
+                
+                localStorage.setItem("jwtToken", token);
                 this
                     .context
                     .state
@@ -136,5 +142,4 @@ class Login extends React.Component {
 }
 
 Login.contextType = Cont;
-
 export default withRouter(Login);

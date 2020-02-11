@@ -1,7 +1,13 @@
 import React from 'react';
 import MyContext from './contextAPI'
+import {Cont} from './contextAPI'
+import {withRouter} from 'react-router-dom'
 
 class User extends React.Component {
+    logout(){
+        this.context.state.logout();
+    }
+
     render() {
         return (
             <MyContext>
@@ -25,7 +31,7 @@ class User extends React.Component {
                             </div>
                         </div>
 
-                        <div onClick={context.state.logout} className="logout-btn btn">Logout</div>
+                        <div onClick={()=>{this.logout()}} className="logout-btn btn">Logout</div>
                     </div>
                 )}
             </MyContext>
@@ -33,4 +39,5 @@ class User extends React.Component {
     }
 }
 
-export default User;
+User.contextType = Cont;
+export default withRouter(User);

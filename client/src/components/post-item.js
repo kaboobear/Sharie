@@ -90,7 +90,7 @@ class PostItem extends React.Component {
                         <div className="flex-wrap">
 
                                 <div className="nested">
-                                    <div className={(post.authorId === context.state.authInfo.user.id) ? "nested-btn" : "nested-btn hidden"}><img src="img/dots-ico.png" alt=""/></div>
+                                    <div className={(post.authorId === context.state.authInfo.user.id) ? "nested-btn" : "nested-btn hidden"}><img src="/img/dots-ico.png" alt=""/></div>
                                     <div
                                         onClick={() => {
                                         context
@@ -103,7 +103,7 @@ class PostItem extends React.Component {
                                 </div>
 
                             <div className="post-item-img">
-                                <img src="img/photo.jpg" alt=""/>
+                                <img src="/img/photo.jpg" alt=""/>
                             </div>
 
                             <div className="post-item-info">
@@ -133,15 +133,15 @@ class PostItem extends React.Component {
                                         this.likePost(post)
                                     }}>
                                         {($.inArray(context.state.authInfo.user.id, post.likesArray) === -1)
-                                            ? (<img src="img/heart-ico.png" alt=""/>)
-                                            : (<img src="img/heart-ico2.png" alt=""/>)}
+                                            ? (<img src="/img/heart-ico.png" alt=""/>)
+                                            : (<img src="/img/heart-ico2.png" alt=""/>)}
                                         <span className="post-item-btn-cnt">
                                             {post.postLikes}
                                         </span>
                                     </div>
 
                                     <div className="post-item-btn share">
-                                        <img src="img/share-ico.png" alt=""/>
+                                        <img src="/img/share-ico.png" alt=""/>
                                         <span className="post-item-btn-cnt">
                                             {post.postShares}
                                         </span>

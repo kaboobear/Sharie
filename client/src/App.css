@@ -665,6 +665,15 @@ margin: 0 -10px;
 margin-bottom: 10px;
 }
 
+.current-user.friend{
+  margin-left: 0;
+  margin-right: 0;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  padding: 10px;
+  margin-bottom: 35px;
+}
+
 .current-user-img {
   width: 50px;
   height: 50px;
@@ -762,6 +771,15 @@ margin-bottom: 10px;
   color:#fff;
   border-radius: 6px;
   transition: .2s;
+  z-index: 2;
+  position: relative;
+  display: block;
+  height: max-content;
+  width: max-content;
+}
+
+.add-friend-button ~ .user-info {
+  background: #000 !important;
 }
 
 .add-friend-button:hover{
@@ -773,27 +791,48 @@ margin-bottom: 10px;
   align-self:center;
   cursor:pointer;
   background: none;
+  height: max-content;
+  width: max-content;
   padding: 6px 12px;
   color:#ccc;
   border-radius: 6px;
   transition: .2s;
   border:1px solid #ccc;
+  z-index: 2;
+  position: relative;
+  display: block;
+}
+
+.big{
+  padding: 10px 15px;
 }
 
 .remove-friend-button:hover{
   border-color:#999;
+  background: none;
   color:#999;
 }
 
 .users-list li {
   padding: 10px;
   display: flex;
-  transition: .3s;
+  transition: .2s;
+  position: relative;
+}
+
+.link{
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  display: block;
 }
 
 .users-list li:hover {
-
+ background: rgba(85,207,139,.2);
 }
+
 
 .user-info {
   display: flex;
@@ -805,7 +844,8 @@ margin-bottom: 10px;
 .user-nick {
   font-size: 18px;
   font-weight: 500;
-  padding-bottom: 2px
+  padding-bottom: 2px;
+  transition: .2s;
 }
 
 .user-val {
@@ -819,6 +859,7 @@ margin-bottom: 10px;
   overflow: hidden;
   border-radius: 10px;
   margin-right: 15px;
+  transition: .2s;
 }
 
 
@@ -912,6 +953,27 @@ margin-bottom: 10px;
 
 
 
+
+
+
+
+
+.back-btn{
+  width: max-content;
+  padding: 10px 30px;
+  margin-bottom: 10px;
+  color:#ccc;
+  border-radius: 8px;
+  transition: .2s;
+  border:1px solid #ccc;
+  background: none;
+}
+
+.back-btn:hover{
+  color:#999;
+  border-color:#999;
+  background: none;
+}
 
 
 

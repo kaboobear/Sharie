@@ -7,6 +7,7 @@ import Register from './components/register';
 import Posts from './components/posts';
 import Navbar from './components/navbar';
 import Users from './components/users';
+import Friend from './components/friend';
 
 import {MyProvider} from './components/contextAPI';
 import {Cont} from './components/contextAPI';
@@ -51,7 +52,12 @@ class App extends React.Component {
                                                     <Navbar/>
 
                                                     <div className="main-section">
-                                                        <Route path="/" exact component={Posts}/>
+                                                        {(context.state.isLoaded) && (
+                                                            <div>
+                                                                <Route path="/" exact component={Posts}/>
+                                                                <Route path="/user/:id" exact strict component={Friend}/>
+                                                            </div>
+                                                        )}
                                                     </div>
 
                                                     <Users/>

@@ -14,6 +14,7 @@ class MyProvider extends React.Component {
         super();
 
         this.state = {
+            isLoaded:false,
             posts: [],
             users: [],
             friends: [],
@@ -95,6 +96,14 @@ class MyProvider extends React.Component {
                         user:user
                     }
                 })
+            },
+
+            setLoaded: (loaded) =>{
+                this.setState(
+                    {
+                        isLoaded:loaded
+                    }
+                )
             },
 
             setAuthToken: (token) => {
@@ -309,15 +318,14 @@ class MyProvider extends React.Component {
         axios
             .get(ApiUrl + '/posts/')
             .then(posts => {
-                this.setState({posts: posts.data})
-
                 axios
                 .get(ApiUrl + '/auth/')
                 .then(users => {
-                    this.state.setUsers(users.data);
-
                     axios.post(ApiUrl+'/auth/friends',this.state.authInfo.user.friendsArray).then(res => {
                         this.state.setFriends(res.data);
+                        this.state.setUsers(users.data);
+                        this.setState({posts: posts.data})
+                        this.state.setLoaded(true);
                     })
                 })
             })
