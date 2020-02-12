@@ -951,6 +951,15 @@ margin-bottom: 10px;
   font-weight: 400;
 }
 
+.register-section.profile .flex-wrap{
+  width: 100%;
+}
+
+.register-section.profile{
+  display: flex;
+  justify-content: center;
+}
+
 
 
 

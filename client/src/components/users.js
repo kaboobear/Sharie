@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MyContext from './contextAPI'
+import notify from "./notifications";
 
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'
@@ -30,7 +31,6 @@ class Users extends React.Component {
     }
 
     addFriend(user) {
-
         this
             .context
             .state
@@ -70,9 +70,7 @@ class Users extends React.Component {
 
                 axios
                     .post(ApiUrl + "/auth/update/" + user._id, temp)
-                    .then(res => {
-
-                    })
+                    .then(res => {})
 
                 localStorage.removeItem("jwtToken");
                 this
@@ -91,25 +89,6 @@ class Users extends React.Component {
     }
 
     removeFriend(user) {
-        axios
-            .post(ApiUrl + '/auth/friends', this.context.state.authInfo.user.friendsArray)
-            .then(res => {
-                this
-                    .context
-                    .state
-                    .setFriends(res.data);
-            })
-
-        var currentUser = this.context.state.authInfo.user;
-        const index = currentUser
-            .friendsArray
-            .indexOf(user._id);
-        if (index > -1) {
-            currentUser
-                .friendsArray
-                .splice(index, 1);
-        }
-
         this
             .context
             .state
@@ -126,6 +105,28 @@ class Users extends React.Component {
                 }
                 return elem
             }))
+
+        axios
+            .post(ApiUrl + '/auth/friends', this.context.state.authInfo.user.friendsArray)
+            .then(res => {
+                console.log(res.data);
+                this
+                    .context
+                    .state
+                    .setFriends(res.data);
+            })
+
+        var currentUser = this.context.state.authInfo.user;
+        const index = currentUser
+            .friendsArray
+            .indexOf(user._id);
+        if (index > -1) {
+            currentUser
+                .friendsArray
+                .splice(index, 1);
+        }
+
+
 
         axios
             .post(ApiUrl + "/auth/update/" + this.context.state.authInfo.user.id, currentUser)
@@ -145,7 +146,9 @@ class Users extends React.Component {
 
                 axios
                     .post(ApiUrl + "/auth/update/" + user._id, temp)
-                    .then(res => {})
+                    .then(res => {
+
+                    })
 
                 localStorage.removeItem("jwtToken");
                 this

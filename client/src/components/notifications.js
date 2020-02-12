@@ -42,6 +42,20 @@ import {toast} from 'react-toastify'
             autoClose: 2000,
             containerId: 'one',
         })
+    },
+
+    notifySeven: ()=>{
+        toast.success("Friend was added", {
+            autoClose: 2000,
+            containerId: 'one',
+        })
+    },
+
+    notifyEight: ()=>{
+        toast.error("Friend was removed", {
+            autoClose: 2000,
+            containerId: 'one',
+        })
     }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MyContext from './contextAPI'
+import notify from "./notifications";
 
 import {Cont} from './contextAPI'
 import {withRouter} from 'react-router-dom'

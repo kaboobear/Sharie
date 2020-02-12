@@ -42,12 +42,12 @@ class Register extends React.Component {
                             .context
                             .state
                             .setUsers(users.data);
-                    })
 
-                this
-                    .props
-                    .history
-                    .push('/');
+                        this
+                            .props
+                            .history
+                            .push('/');
+                    })
             })
             .catch(err => {
                 this
@@ -69,8 +69,6 @@ class Register extends React.Component {
             <MyContext>
                 {(context) => (
                     <div className="register-section">
-                        {/* <div className="page-title">Register</div> */}
-
                         <div className="flex-wrap center">
                             <form
                                 onSubmit={(e) => {

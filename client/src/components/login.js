@@ -30,7 +30,7 @@ class Login extends React.Component {
                     .setAuthToken(false);
 
                 const {token} = res.data;
-                
+
                 localStorage.setItem("jwtToken", token);
                 this
                     .context
@@ -39,26 +39,37 @@ class Login extends React.Component {
 
                 const decoded = jwt_decode(token);
 
-
                 this
                     .context
                     .state
                     .setAuth(true, decoded);
 
-                this
-                    .context
-                    .state
-                    .setAuthInput('', '', '', '');
 
-                this
-                    .context
-                    .state
-                    .setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
+                axios
+                    .post(ApiUrl + '/auth/friends', decoded.friendsArray)
+                    .then(res => {
+                        console.log(res.data);
+                        console.log("xx");
 
-                this
-                    .props
-                    .history
-                    .push('/');
+                        this.context
+                            .state
+                            .setFriends(res.data);
+
+                        this
+                            .context
+                            .state
+                            .setAuthInput('', '', '', '');
+
+                        this
+                            .context
+                            .state
+                            .setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
+
+                        this
+                            .props
+                            .history
+                            .push('/');
+                    })
 
             })
             .catch(err => {
@@ -69,25 +80,18 @@ class Login extends React.Component {
             });
     }
 
-
-
-
-    componentWillUnmount(){
-        this.context.state.setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
+    componentWillUnmount() {
+        this
+            .context
+            .state
+            .setAuthErrors({login: '', mail: '', pass: '', pass2: ''});
     }
-    
-
-
-
-
 
     render() {
         return (
             <MyContext>
                 {(context) => (
                     <div className="login-section">
-                        {/* <div className="page-title">Login</div> */}
-
                         <div className="flex-wrap center">
                             <form
                                 onSubmit={(e) => {
@@ -117,9 +121,9 @@ class Login extends React.Component {
                                         className={this.context.state.authErrors.pass && "error"}
                                         value={context.state.authInput.pass}
                                         onChange={context.state.handleChange2}/> {this.context.state.authErrors.pass && (
-                                            <div className="exclam">
-                                                <img src="img/exclam-ico.png" alt=""/>
-                                            </div>
+                                        <div className="exclam">
+                                            <img src="img/exclam-ico.png" alt=""/>
+                                        </div>
                                     )}
 
                                     {/* {this.context.state.authErrors.pass && (
