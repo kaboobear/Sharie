@@ -296,24 +296,24 @@ class MyProvider extends React.Component {
     }
 
     componentDidMount() {
-        if (localStorage.jwtToken) {
-            const token = localStorage.jwtToken;
-            this
-                .state
-                .setAuthToken(token);
-            const decoded = jwt_decode(token);
-            this
-                .state
-                .setAuth(true, decoded);
+        // if (localStorage.jwtToken) {
+        //     const token = localStorage.jwtToken;
+        //     this
+        //         .state
+        //         .setAuthToken(token);
+        //     const decoded = jwt_decode(token);
+        //     this
+        //         .state
+        //         .setAuth(true, decoded);
                 
 
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                this
-                    .state
-                    .setAuth(false, {});
-            }
-        }
+        //     const currentTime = Date.now() / 1000;
+        //     if (decoded.exp < currentTime) {
+        //         this
+        //             .state
+        //             .setAuth(false, {});
+        //     }
+        // }
 
         axios
             .get(ApiUrl + '/posts/')
