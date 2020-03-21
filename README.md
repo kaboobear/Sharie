@@ -20,7 +20,7 @@
 + "npm start" to run front-end (on port 3000)
 + "nodemon server" to run back-end (on port 5000)
 
-<br>
+<hr>
 
 
 ![Layout](kaboo1.png)
