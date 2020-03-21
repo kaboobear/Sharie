@@ -23,13 +23,13 @@
 <hr>
 
 
-![Layout](kaboo1.png)
+![Layout](github-img/kaboo1.png)
 
 <br>
 
 <hr>
 
-![Layout](kaboo2.png)
+![Layout](github-img/kaboo2.png)
 
 <br>
 
