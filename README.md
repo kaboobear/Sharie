@@ -22,7 +22,6 @@
 
 
 
-<hr>
 
 ![Layout](kaboo1.png)
 
