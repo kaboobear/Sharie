@@ -2,7 +2,7 @@
     <img src="https://img.icons8.com/bubbles/100/000000/rocket.png" width="100" height="100">
 </p>
 
-<h1 align="center">Sharie</h1>
+<h1 align="center">Social network 'Sharie'</h1>
 
 [![Forks][forks-shield]][forks-url]
 [![Issues][issues-shield]][issues-url]
@@ -58,9 +58,9 @@
 
 
 
-[forks-shield]: https://img.shields.io/github/forks/kaboobear/Sharie?style=flat-square
-[forks-url]: https://github.com/kaboobear/Sharie/network/members
-[issues-shield]: https://img.shields.io/github/issues/kaboobear/Sharie.svg?style=flat-square
-[issues-url]: https://github.com/kaboobear/Sharie/issues
-[license-shield]: https://img.shields.io/github/license/kaboobear/Sharie.svg?style=flat-square
-[license-url]: https://github.com/kaboobear/Sharie/blob/master/LICENSE.txt
+[forks-shield]: https://img.shields.io/github/forks/kaboobear/Social-Network?style=flat-square
+[forks-url]: https://github.com/kaboobear/Social-Network/network/members
+[issues-shield]: https://img.shields.io/github/issues/kaboobear/Social-Network.svg?style=flat-square
+[issues-url]: https://github.com/kaboobear/Social-Network/issues
+[license-shield]: https://img.shields.io/github/license/kaboobear/Social-Network.svg?style=flat-square
+[license-url]: https://github.com/kaboobear/Social-Network/blob/master/LICENSE.txt
